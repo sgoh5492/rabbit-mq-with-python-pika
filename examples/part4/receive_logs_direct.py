@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import pika
 import sys
+import time
 
 param = pika.ConnectionParameters( host = 'localhost' )
 connection = pika.BlockingConnection( param )
@@ -23,6 +24,9 @@ for severity in severities:
         routing_key = severity )
 
 def callback( ch, method, properties, body ):
+    for i in range(3) :
+        print " [progress] %d/3" % ( i )
+        time.sleep( 1 )
     print " [x] %r:%r" % ( method.routing_key, body, )
 
 channel.basic_consume( callback, queue = queue_name, no_ack = True )
